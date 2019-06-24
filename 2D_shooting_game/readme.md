@@ -1,9 +1,9 @@
 # 2D Shooting Game: alien invasion
-A top view 2D shooting game.
+A top view 2D shooting game created using Python's Pygame Library.
 
 ## Overview
 * player controls a character that appears at the center of the screen.
-* player can move in four directions, controled by left, right, down and up arrow key
+* player can move in four directions, controlled by using arrow keys or WSAD keys.
 * player can aim and shoot by using mouse
 * player can choose different weapons from armory system, at beginning, player has a default hand gun
 * enemies (alien creatures) spawn at edges of the screen, and they will hunt the player down
@@ -13,7 +13,7 @@ A top view 2D shooting game.
 
 ## Implementation detail
 ### Basic movement of player
-Implement the movement of the character (controled by arrow key), and the orientation of the character (always facing the where mouse is, it is also the shooting direction)
+Implement the movement of the character (controlled by arrow key), and the orientation of the character (always facing the where mouse is, it is also the shooting direction)
 
 ### Game object animation
 When moving the object, they should display animations rather than static, for example, the character should look like moving its legs when moving on the screen. Also, if an enemy is killed by the player, an animation should be shown.

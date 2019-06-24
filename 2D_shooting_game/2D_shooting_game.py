@@ -11,10 +11,11 @@ def run_game():
     game_settings = Settings()  # create an object of Setting class, and access the attributes
 
     screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))  # create a game window
-    pygame.display.set_caption(game_settings.caption)  # set the caption of the game window
-    screen.fill(game_settings.bg_color)  # .fill() will take a tuple and set background color
 
-    # make a ship, pass:
+    pygame.display.set_caption(game_settings.caption)  # set the caption of the game window
+    # screen.fill(game_settings.bg_color)  # .fill() will take a tuple and set background color, should be in game loop
+
+    # make a ship, pass in following attributes: (check ship.Ship class for details)
     #   -the surface on which pygame draws the ship
     #   -game_settings (which contains settings for the ship)
     ship = Ship(screen, game_settings)

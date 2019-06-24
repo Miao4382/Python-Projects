@@ -7,7 +7,7 @@ class Settings:
         self.caption = "2D Shooting Game"
         self.screen_width = 1050
         self.screen_height = 690
-        self.bg_color = (230, 230, 230)  # create a tuple containing the RGB background color
+        self.bg_color = (130, 50, 200)  # create a tuple containing the RGB background color, used in display's fill() function
 
         # ship settings
         self.ship_speed_factor = 3  # step size of ship movement between each screen drawing

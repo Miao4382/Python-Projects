@@ -12,3 +12,9 @@ class Settings:
         # ship settings
         self.ship_speed_factor = 3  # step size of ship movement between each screen drawing
         self.ship_speed_acceleration_ratio = 10  # maximum acceleration ratio (times of ship_speed_factor)
+
+        # bullet settings
+        self.bullet_speed_factor = 100
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (255, 223, 0)

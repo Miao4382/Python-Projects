@@ -22,7 +22,7 @@ def check_keydown_events(event, game_settings, screen, ship, bullets):
         ship.moving_down = True
         
     if event.key == pygame.K_SPACE:
-        # create a new bullet and it to the bullets group
+        # create a new bullet and add it to the bullets group
         new_bullet = Bullet(game_settings, screen, ship)
         bullets.add(new_bullet)
 
@@ -67,7 +67,7 @@ def check_events(game_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(game_settings, screen, ship, bullets):
+def update_screen(game_settings, screen, ship, bullets, battleship):
     """Update items on the screen and draw new screen"""
     # screen.fill(game_settings.bg_color)
     bg = pygame.image.load('bg.jpg')
@@ -75,8 +75,18 @@ def update_screen(game_settings, screen, ship, bullets):
     
     # redraw ship
     ship.blitme()
+
+    # redraw battleship
+    battleship.blitme()
     
-    # delete bullets that are out of screen and redraw all bullets 
+    # delete bullets that are out of screen and redraw all bullets
+    """
+    You shouldn't remove items from a list within a for loop that is traversing
+    the list. So you traverse using a copy of that list.
+    
+    pygame.Sprite.Group.remove() accepts an item type and try to remove that in
+    its elements.
+    """
     for bullet in bullets.copy():
         if bullet.rect.bottom < 0:
             bullets.remove(bullet)

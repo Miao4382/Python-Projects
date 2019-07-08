@@ -1,8 +1,9 @@
 import pygame
-from pygame.sprite import Group
+from pygame.sprite import Group  # manage multiple same objects, can modify them at the same time
 from setting import Settings
 import game_functions as gf
 from ship import Ship
+from battleship import Battleship
 
 
 def run_game():
@@ -20,6 +21,9 @@ def run_game():
     #   -the surface on which pygame draws the ship
     #   -game_settings (which contains settings for the ship)
     ship = Ship(screen, game_settings)
+    
+    # make a battleship 
+    battleship = Battleship(screen, game_settings)
 
     # make a group to store bullets that was shot
     bullets = Group()
@@ -30,11 +34,13 @@ def run_game():
         # Watch for keyboard and mouse events
         # using a function in game_functions
         gf.check_events(game_settings, screen, ship, bullets)
+
+        #
         ship.update()
         bullets.update()
 
         # update screen and draw it
-        gf.update_screen(game_settings, screen, ship, bullets)
+        gf.update_screen(game_settings, screen, ship, bullets, battleship)
 
 
 run_game()

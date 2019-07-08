@@ -60,9 +60,8 @@ class Ship:
         self.rect.centery = self.center_y
 
     def blitme(self):
-        """Draw the ship at its current location"""
-
-
+        """
+        Draw the ship at its current location"""
         # image = pygame.image.load('img/drawing.png')
         # rect = image.get_rect()
         # rect.centerx = self.screen_rect.centerx

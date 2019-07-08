@@ -13,8 +13,8 @@ import random
 MovementSpeed = 10  # 主角色移动速度
 CannonballSpeed = 50  # 炮弹移动速度
 CatSpeed = 7  # 猫的移动速度（通过按键WSAD实现上下左右移动）
-width, height = 1600, 900  # 游戏窗口大小
-width1, height1 = 200, 95  # 主角色大小（像素值）
+width, height = 1280, 720  # 游戏窗口大小
+width1, height1 = 68, 58  # 主角色大小（像素值）
 width2, height2 = 150, 123  # 猫的大小
 TotalTime = 90  # 设置游戏时间，以秒为单位
 
@@ -35,17 +35,35 @@ keys = [False, False, False, False]  # 按键设置
 
 # ++++++++++++++++++游戏窗口初始化及素材导入+++++++++++++++++++++++++++++++++++++
 # 初始化游戏窗口以及各种图片素材的导入
+"""
+In this section, many "surfaces" are created. All of them will be displayed in 
+the main game window. (surfaces created by pygame.image.load())
+
+These surfaces are:
+    background
+    badfish
+    cannonballimg1
+    catimg
+    pipishrimpimg
+    tortoiseimg
+    conchimg
+    crabimg
+    fishimg
+    healthbar
+    healthimg
+    gameover
+    youwin
+
+They will be blited in the main game loop
+"""
+
 pygame.init()
-screen = pygame.display.set_mode((width, height))
-background = pygame.image.load("pic/bg.jpg")  # 背景图片
-badfish = pygame.image.load("pic/01.png")  # 主角色图片
+screen = pygame.display.set_mode((width, height))  # set up main game window
+background = pygame.image.load("img/bg.jpg")  # 背景图片
+badfish = pygame.image.load("img/player_pistol.jpg")  # 主角色图片, badfish is the main player 
 
 cannonballimg1 = pygame.image.load("pic/cannon.png")  # 为了趣味性设置了五种不同的炮弹
-cannonballimg2 = pygame.image.load("pic/cannon.png")
-cannonballimg3 = pygame.image.load("pic/cannon.png")
-cannonballimg4 = pygame.image.load("pic/cannon.png")
-cannonballimg5 = pygame.image.load("pic/cannon.png")
-cannonballimgs = [cannonballimg1, cannonballimg2, cannonballimg3, cannonballimg4, cannonballimg5]
+cannonballimgs = [cannonballimg1, cannonballimg1, cannonballimg1, cannonballimg1, cannonballimg1]
 
 catimg = pygame.image.load("pic/cat.jpg")  # 猫的图片
 pipishrimpimg = pygame.image.load("pic/1.png")  # 皮皮虾
@@ -69,12 +87,12 @@ while running:
     badtimer -= 1
     screen.fill(0)  # 在重新绘制之前清除屏幕
     screen.blit(background, (0, 0))  # 绘制屏幕窗口背景
+    
     # 处理主角色旋转
     position = pygame.mouse.get_pos()  # 获取鼠标位置
     angle = math.atan2(position[1] - playerpos[1], position[0] - playerpos[0])  # 计算旋转角度
     playerrot = pygame.transform.rotate(badfish, 360 - angle * 57.29)
-    playerpos1 = (
-    playerpos[0] - playerrot.get_rect().width / 2, playerpos[1] - playerrot.get_rect().height / 2)  # 重新计算主角色位置
+    playerpos1 = (playerpos[0] - playerrot.get_rect().width / 2, playerpos[1] - playerrot.get_rect().height / 2)  # 重新计算主角色位置
     screen.blit(playerrot, playerpos1)  # 将旋转后主角色显示在屏幕上
 
     # 炮弹
@@ -88,6 +106,7 @@ while running:
         # 控制炮弹在一定范围（基本等同于游戏窗口的范围）内，出了这个限定范围就会被删除
         if cannonball[1] < -width1 or cannonball[1] > width or cannonball[2] < -height1 or cannonball[2] > height:
             cannonballs.pop(index)
+
     # 获得转向后的图片并显示
     for cannonball in cannonballs:
         cannonballimg = cannonballimgs[cannonball[3]]  # 当前炮弹样式（炮弹生成的时候决定的）
@@ -211,11 +230,15 @@ while running:
                 keys[3] = False
         # 鼠标事件，增加炮弹
         if event.type == pygame.MOUSEBUTTONDOWN:
+            pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
+            s = pygame.mixer.Sound('sfx/weapons/p228.wav')
+            s.play(0)
             position = pygame.mouse.get_pos()  # 获取鼠标位置
             acc[1] += 1  # 炮弹总数+1
             cannonballs.append(
                 [math.atan2(position[1] - (playerpos1[1] + width1 / 2), position[0] - (playerpos1[0] + height1 / 2)),
                  playerpos1[0] + width1 / 2, playerpos1[1] + height1 / 2, random.randint(0, 4)])
+
     # 控制主角色移动（限制移动范围）
     if keys[0] and playerpos[1] - height1 / 2 >= MovementSpeed:  # W
         playerpos[1] -= MovementSpeed

@@ -32,12 +32,12 @@ class Settings:
         self.screen_height = 690
 
         # main character settings (carrying pistol)
-        self.character_speed = 10
+        self.character_speed = 3
         self.character_acceleration_ratio = 5
         self.max_health_point = 200       
 
         # enemy settings
-        self.enemy_speed = 7
+        self.enemy_speed = 3
         self.enemy_timer = 100
         self.enemy_timer_1 = 0
         

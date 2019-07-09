@@ -1,6 +1,7 @@
 import sys
 import pygame
 import math  # for rotation angle calculation
+import random
 from bullet_pistol import BulletPistol
 
 
@@ -43,6 +44,61 @@ def blit_player(player, screen):
     screen.blit(player_rotated_image, player_updated_rect)
     
 
+def check_keydown_events(event, player):
+    """
+    This function will check which key is pressed down, and then perform corresponding operations.
+    """
+    
+    if event.key == pygame.K_w:
+        player.moving_up = True
+    
+    if event.key == pygame.K_a:
+        player.moving_left = True    
+
+    if event.key == pygame.K_s:
+        player.moving_down = True
+
+    if event.key == pygame.K_d:
+        player.moving_right = True
+        
+
+def check_keyup_events(event, player):
+    if event.key == pygame.K_w:
+        player.moving_up = False
+    
+    if event.key == pygame.K_a:
+        player.moving_left = False  
+
+    if event.key == pygame.K_s:
+        player.moving_down = False
+
+    if event.key == pygame.K_d:
+        player.moving_right = False
+        
+def check_mousedown(event):
+    # left click
+    if event.button == 1:
+        s = pygame.mixer.Sound('sfx/weapons/p228.wav')
+        s.play(0)
+        
+def check_events(player):
+    """
+    Check the broad category and call corresponding methods to do the specific work
+    """
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        if event.type == pygame.KEYDOWN:
+            check_keydown_events(event, player)
+        
+        if event.type == pygame.KEYUP:
+            check_keyup_events(event, player)
+            
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            check_mousedown(event)
+
+            
 def update_screen(background, player, screen):
     """
     Redraw screens (after items on the screen are updated)

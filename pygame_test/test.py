@@ -230,16 +230,24 @@ while running:
                 keys[3] = False
         # 鼠标事件，增加炮弹
         if event.type == pygame.MOUSEBUTTONDOWN:
+            # play weapon sound
             pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
             s = pygame.mixer.Sound('sfx/weapons/p228.wav')
             s.play(0)
+
+            # add bullet
             position = pygame.mouse.get_pos()  # 获取鼠标位置
             acc[1] += 1  # 炮弹总数+1
             cannonballs.append(
                 [math.atan2(position[1] - (playerpos1[1] + width1 / 2), position[0] - (playerpos1[0] + height1 / 2)),
                  playerpos1[0] + width1 / 2, playerpos1[1] + height1 / 2, random.randint(0, 4)])
 
-    # 控制主角色移动（限制移动范围）
+            # try to display firing image
+            # badfish = pygame.image.load('img/0.jpg')
+            # pygame.time.wait(1000)
+            # badfish = pygame.image.load('img/player_pistol.jpg')
+
+    # 控制主角色移动（限制移动范围）aaaa
     if keys[0] and playerpos[1] - height1 / 2 >= MovementSpeed:  # W
         playerpos[1] -= MovementSpeed
     elif keys[2] and height - playerpos[1] - height1 / 2 >= MovementSpeed:  # S

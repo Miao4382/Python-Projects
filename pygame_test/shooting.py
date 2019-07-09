@@ -28,16 +28,16 @@ def run_game():
     
     # create objects that will displayed on game main screen
     background = pygame.image.load("img/bg.jpg")
-    player = PlayerPistol(screen, game_settings)
-    
+    player = PlayerPistol(screen, game_settings)   
     
     # start the main loop of the game
     while True:
         
-        # check event (quit)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        # check event
+        gf.check_events(player)
+        
+        # update player stats
+        player.update()
                 
         # update screen
         gf.update_screen(background, player, screen)

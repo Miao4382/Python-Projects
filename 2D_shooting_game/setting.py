@@ -1,20 +1,55 @@
 class Settings:
-    """a class to store all settings for the game"""
+    """
+    A class to store all settings for the game. For easy modifying
+
+    Attributes (self.):
+        :caption: title of the game window
+        :screen_width: size of the game window
+        :screen_height: size of the game window
+
+        :character_speed:
+            The speed of the character. Increase step size of char's rect during
+            each game loop.
+        :character_acceleration_ratio:
+            Maximum acceleration ratio (times of self.character_speed
+        :max_health_point:
+            Maximum health point of player's character
+
+        :enemy_speed: speed of enemy (zombies)
+        :enemy_timer:
+        :enemy_timer_1: two timers used to control the time and frequency
+            of enemy's occurrence
+
+        :total_time: the total time one game lasts
+    """
 
     def __init__(self):
-        """initialize game seeting attributes"""
+        """initialize game setting attributes"""
+
         # screen settings
-        self.caption = "2D Shooting Game"
+        self.caption = "shooting game test"
         self.screen_width = 1050
         self.screen_height = 690
-        self.bg_color = (130, 50, 200)  # create a tuple containing the RGB background color, used in display's fill() function
 
-        # ship settings
-        self.ship_speed_factor = 3  # step size of ship movement between each screen drawing
-        self.ship_speed_acceleration_ratio = 10  # maximum acceleration ratio (times of ship_speed_factor)
+        # main character settings (carrying pistol)
+        self.character_speed = 3
+        self.character_acceleration_ratio = 5
+        self.max_health_point = 200
 
-        # bullet settings
-        self.bullet_speed_factor = 100
-        self.bullet_width = 3
-        self.bullet_height = 30
-        self.bullet_color = (255, 223, 0)
+        # enemy settings
+        self.enemy_speed = 3
+        self.enemy_timer = 100
+        self.enemy_timer_1 = 0
+
+        # bullet_pistol settings
+        self.bullet_pistol_speed = 60
+        self.bullet_pistol_width = 3
+        self.bullet_pistol_height = 20
+        self.bullet_pistol_color = (255, 223, 0)
+
+        # sound channels (playback channels)
+        self.foot_step_channel = 0
+        self.pistol_channel = 1
+
+        # other game settings
+        self.total_time = 90

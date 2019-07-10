@@ -1,46 +1,42 @@
 import pygame
-from pygame.sprite import Group  # manage multiple same objects, can modify them at the same time
-from setting import Settings
+from setting import Settings  # for game settings
+from player import PlayerPistol
 import game_functions as gf
-from ship import Ship
-from battleship import Battleship
 
 
 def run_game():
-    """ Initialize game and create a screen object"""
+    """
+    This function does following:
+        -Initialize game objects
+        -create a screen object
+        -run the main game loop
+        -deal with after-exiting tasks
 
-    pygame.init()  # initialize the background things needed by pygame
-    game_settings = Settings()  # create an object of Setting class, and access the attributes
+    :return: Null
+    """
 
-    screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))  # create a game window
+    # create a game setting object
+    game_settings = Settings()
 
-    pygame.display.set_caption(game_settings.caption)  # set the caption of the game window
-    # screen.fill(game_settings.bg_color)  # .fill() will take a tuple and set background color, should be in game loop
+    # initialize pygame and the main screen
+    pygame.init()
+    screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
+    pygame.display.set_caption(game_settings.caption)
 
-    # make a ship, pass in following attributes: (check ship.Ship class for details)
-    #   -the surface on which pygame draws the ship
-    #   -game_settings (which contains settings for the ship)
-    ship = Ship(screen, game_settings)
-    
-    # make a battleship 
-    battleship = Battleship(screen, game_settings)
+    # create objects that will displayed on game main screen
+    background = pygame.image.load("img/bg.jpg")
+    player = PlayerPistol(screen, game_settings)
 
-    # make a group to store bullets that was shot
-    bullets = Group()
-
-    # start the main loop for the game
+    # start the main loop of the game
     while True:
+        # check event
+        gf.check_events(player)
 
-        # Watch for keyboard and mouse events
-        # using a function in game_functions
-        gf.check_events(game_settings, screen, ship, bullets)
+        # update player stats
+        player.update()
 
-        #
-        ship.update()
-        bullets.update()
-
-        # update screen and draw it
-        gf.update_screen(game_settings, screen, ship, bullets, battleship)
+        # update screen
+        gf.update_screen(background, player, screen)
 
 
 run_game()

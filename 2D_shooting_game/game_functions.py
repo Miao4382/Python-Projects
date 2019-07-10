@@ -1,98 +1,118 @@
 import sys
 import pygame
-from bullet import Bullet
+import math  # for rotation angle calculation
+import random
+from bullet_pistol import BulletPistol
 
 
-def check_keydown_events(event, game_settings, screen, ship, bullets):
-    """respond to key press"""
-    if event.key == pygame.K_RIGHT or event.key == ord('d'):
-        # set the moving status of the ship
-        ship.moving_right = True
+def blit_player(player, screen):
+    """
+    This function deals with the rotation of the player's character along with mouse
 
-    if event.key == pygame.K_LEFT or event.key == ord('a'):
-        # set the moving status of the ship
-        ship.moving_left = True
+    Ideas:
+        To display the player onto the screen, we have to call screen.blit(image, rect). The image is the "surface" of the player, while the rect is the rectangle of the player. Rotation will only affect the rotated angle of player's image surface. To achieve this, we first get the position of mouse pointer using:
+            pygame.mouse.get_pos()
+        This will return a tuple, which is (x, y), containing x and y value of mouse's position. Then we can get the coordinate of player.rect's center:
+            (player.rect.centerx, player.rect.centery)
+        We have two points, which is the mouse pointer and the center of player's character's center. We can obtain the rotation angle:
+            angle = math.atan2(player.rect.centery - mouse_position[1], player.rect.centerx - mouse_position[0]) * 57.29
 
-    if event.key == pygame.K_UP or event.key == ord('w'):
-        # set the moving status of the ship
-        ship.moving_up = True
+        Pay attention the angle returned by math.atan2() is in rad, we have to convert it to degrees.
 
-    if event.key == pygame.K_DOWN or event.key == ord('s'):
-        # set the moving status of the ship
-        ship.moving_down = True
-        
-    if event.key == pygame.K_SPACE:
-        # create a new bullet and add it to the bullets group
-        new_bullet = Bullet(game_settings, screen, ship)
-        bullets.add(new_bullet)
+        Then we rotate player's image to reflect this change. One important thing is, we shouldn't modify the original image (stored in player's object). Here, we use another variable to hold the rotated player's image:
+            player_rotated_image = pygame.transform.rotate(player.image, 180 - angle)
 
-    if event.key == pygame.K_ESCAPE:
-        # pull up settings screen with option to quit game?
-        sys.exit()
+        Then, we blit this rotated image to the screen, rather than the original image. This is because we have to keep the original image so we can use it as a reference to calculate the rotated angle.
 
+        Before we blit, we have to get the new rect. When the image is rotated, "the image will be padded larger to hold the new size", which means a larger rect is created that surrounds the image.
 
-def check_keyup_events(event, ship):
-    """respond to key releases"""
-    if event.key == pygame.K_RIGHT or event.key == ord('d'):
-        # reset the moving status of the ship
-        ship.moving_right = False
-        ship.acceleration = 0
+    Parameters:
+        player:
+    """
 
-    if event.key == pygame.K_LEFT or event.key == ord('a'):
-        # reset the moving status of the ship
-        ship.moving_left = False
-        ship.acceleration = 0
+    # get mouse coordinate
+    mouse_position = pygame.mouse.get_pos()
+    # calculate angle, 1 rad = 57.29 degrees
+    angle = math.atan2(player.rect.centery - mouse_position[1], player.rect.centerx - mouse_position[0]) * 57.29
+    # rotate player's image surface
+    player_rotated_image = pygame.transform.rotate(player.image, 180 - angle)
 
-    if event.key == pygame.K_UP or event.key == ord('w'):
-        # reset the moving status of the ship
-        ship.moving_up = False
-        ship.acceleration = 0
+    # find out where to blit the rotated image (coordinate of the upper left corner)
+    player_updated_rect = (player.rect.centerx - player_rotated_image.get_rect().width / 2,
+                           player.rect.centery - player_rotated_image.get_rect().height / 2)
 
-    if event.key == pygame.K_DOWN or event.key == ord('s'):
-        # reset the moving status of the ship
-        ship.moving_down = False
-        ship.acceleration = 0
+    # blit the new position
+    screen.blit(player_rotated_image, player_updated_rect)
 
 
-def check_events(game_settings, screen, ship, bullets):
-    """response to key presses and mouse events"""
+def check_keydown_events(event, player):
+    """
+    This function will check which key is pressed down, and then perform corresponding operations.
+    """
+
+    if event.key == pygame.K_w:
+        player.moving_up = True
+
+    if event.key == pygame.K_a:
+        player.moving_left = True
+
+    if event.key == pygame.K_s:
+        player.moving_down = True
+
+    if event.key == pygame.K_d:
+        player.moving_right = True
+
+
+def check_keyup_events(event, player):
+    if event.key == pygame.K_w:
+        player.moving_up = False
+
+    if event.key == pygame.K_a:
+        player.moving_left = False
+
+    if event.key == pygame.K_s:
+        player.moving_down = False
+
+    if event.key == pygame.K_d:
+        player.moving_right = False
+
+
+def check_mousedown(event):
+    # left click
+    if event.button == 1:
+        s = pygame.mixer.Sound('sfx/weapons/p228.wav')
+        pisto_channel = pygame.mixer.Channel(1)
+        pisto_channel.play(s)
+
+
+def check_events(player):
+    """
+    Check the broad category and call corresponding methods to do the specific work
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            check_keydown_events(event, game_settings, screen, ship, bullets)
+            check_keydown_events(event, player)
 
-        elif event.type == pygame.KEYUP:
-            check_keyup_events(event, ship)
+        if event.type == pygame.KEYUP:
+            check_keyup_events(event, player)
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            check_mousedown(event)
 
 
-def update_screen(game_settings, screen, ship, bullets, battleship):
-    """Update items on the screen and draw new screen"""
-    # screen.fill(game_settings.bg_color)
-    bg = pygame.image.load('bg.jpg')
-    screen.blit(bg, (0, 0))
-    
-    # redraw ship
-    ship.blitme()
-
-    # redraw battleship
-    battleship.blitme()
-    
-    # delete bullets that are out of screen and redraw all bullets
+def update_screen(background, player, screen):
     """
-    You shouldn't remove items from a list within a for loop that is traversing
-    the list. So you traverse using a copy of that list.
-    
-    pygame.Sprite.Group.remove() accepts an item type and try to remove that in
-    its elements.
+    Redraw screens (after items on the screen are updated)
     """
-    for bullet in bullets.copy():
-        if bullet.rect.bottom < 0:
-            bullets.remove(bullet)
-        
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
-    
+
+    # plot background
+    screen.blit(background, (0, 0))
+
+    # update and draw player's character
+    blit_player(player, screen)
+
     # draw the updated screen
     pygame.display.flip()

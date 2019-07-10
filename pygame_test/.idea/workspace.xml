@@ -110,7 +110,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1273" />
     <option name="width" value="1294" />
     <option name="height" value="1047" />
@@ -156,7 +156,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.shooting">
+  <component name="RunManager" selected="Python.test">
     <configuration name="shooting" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pygame_test" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -201,8 +201,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.shooting" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.shooting" />
       </list>
     </recent_temporary>
   </component>

@@ -15,13 +15,13 @@ def run_game():
     :return: Null
     """
 
-    # create a game setting object
-    game_settings = Settings()
-
-    # initialize pygame and the main screen
-    pygame.init()
-    screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
-    pygame.display.set_caption(game_settings.caption)
+    # # create a game setting object
+    # game_settings = Settings()
+    #
+    # # initialize pygame and the main screen
+    # pygame.init()
+    # screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
+    # pygame.display.set_caption(game_settings.caption)
 
     # create objects that will displayed on game main screen
     background = pygame.image.load("img/bg.jpg")
@@ -39,4 +39,13 @@ def run_game():
         gf.update_screen(background, player, screen)
 
 
-run_game()
+# create a game setting object
+game_settings = Settings()
+
+# initialize pygame and the main screen
+pygame.init()
+screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
+pygame.display.set_caption(game_settings.caption)
+
+# run_game()
+gf.welcome_screen(game_settings, screen)

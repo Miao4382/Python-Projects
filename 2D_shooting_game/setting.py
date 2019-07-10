@@ -53,3 +53,6 @@ class Settings:
 
         # other game settings
         self.total_time = 90
+
+        # welcome menu settings
+        self.font = "img/INVASION2000.TTF"

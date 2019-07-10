@@ -39,6 +39,8 @@ class PlayerPistol:
         self.foot_step_sound_4 = pygame.mixer.Sound('sfx/character/pl_step4.wav')
         # create a tuple to hold the sound of foot steps 
         self.foot_steps = self.foot_step_sound_1, self.foot_step_sound_2, self.foot_step_sound_3, self.foot_step_sound_4
+        # create a channel for playing foot step sounds 
+        self.foot_steps_channel = pygame.mixer.Channel(game_settings.foot_step_channel)
         
         # character moving flag, if the flag is true, character should be in a continuously moving state
         self.moving_right = False
@@ -56,11 +58,12 @@ class PlayerPistol:
         # play random foot step sound while moving flag is true 
         # if the character is near the boundary, don't play sound
         if (self.moving_down and self.rect.bottom + 20 < self.screen_rect.bottom) or (self.moving_left and self.rect.left > 20) or (self.moving_right and self.rect.right + 20 < self.screen_rect.right) or (self.moving_up and self.rect.top > 20):
-            if not pygame.mixer.get_busy():
-                self.foot_steps[random.randint(0, 3)].play(0)
+            if not self.foot_steps_channel.get_busy():  # if foot step channel is not playing 
+                self.foot_steps_channel.play(self.foot_steps[random.randint(0, 3)])
+                #self.foot_steps[random.randint(0, 3)].play(0)
         # stop playing sound effect when player stopped
         if not self.moving_down and not self.moving_left and not self.moving_right and not self.moving_up:
-            pygame.mixer.stop()
+            self.foot_steps_channel.stop()
             
         # move player 
         if self.moving_down and self.rect.bottom + 20 < self.screen_rect.bottom:

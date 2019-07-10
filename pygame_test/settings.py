@@ -47,6 +47,10 @@ class Settings:
         self.bullet_pistol_height = 20
         self.bullet_pistol_color = (255, 223, 0)
         
+        # sound channels (playback channels)
+        self.foot_step_channel = 0
+        self.pistol_channel = 1
+        
         
         # other game settings
         self.total_time = 90

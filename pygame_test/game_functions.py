@@ -24,7 +24,7 @@ def blit_player(player, screen):
         
         Then, we blit this rotated image to the screen, rather than the original image. This is because we have to keep the original image so we can use it as a reference to calculate the rotated angle.
         
-        Before we blit, we have to get the new rect, since when the image is rotated, "the image will be padded larger to hold the new size", which means a larger rect is created that surrounds the image.
+        Before we blit, we have to get the new rect. When the image is rotated, "the image will be padded larger to hold the new size", which means a larger rect is created that surrounds the image.
         
     Parameters:
         player: 
@@ -32,12 +32,12 @@ def blit_player(player, screen):
     
     # get mouse coordinate
     mouse_position = pygame.mouse.get_pos()
-    # calculate angle
+    # calculate angle, 1 rad = 57.29 degrees
     angle = math.atan2(player.rect.centery - mouse_position[1], player.rect.centerx - mouse_position[0]) * 57.29
     # rotate player's image surface 
     player_rotated_image = pygame.transform.rotate(player.image, 180 - angle)
     
-    # update player's rect
+    # find out where to blit the rotated image (coordinate of the upper left corner)
     player_updated_rect = (player.rect.centerx - player_rotated_image.get_rect().width / 2, player.rect.centery - player_rotated_image.get_rect().height / 2)
     
     # blit the new position
@@ -79,7 +79,8 @@ def check_mousedown(event):
     # left click
     if event.button == 1:
         s = pygame.mixer.Sound('sfx/weapons/p228.wav')
-        s.play(0)
+        pisto_channel = pygame.mixer.Channel(1)
+        pisto_channel.play(s)
         
 def check_events(player):
     """

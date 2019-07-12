@@ -11,7 +11,7 @@ import random
 # +++++++++++++++++++++初始化参数及设置+++++++++++++++++++++++++++++++++++++++++
 # 初始化参数
 MovementSpeed = 10  # 主角色移动速度
-CannonballSpeed = 50  # 炮弹移动速度
+CannonballSpeed = 5  # 炮弹移动速度
 CatSpeed = 7  # 猫的移动速度（通过按键WSAD实现上下左右移动）
 width, height = 1280, 720  # 游戏窗口大小
 width1, height1 = 68, 58  # 主角色大小（像素值）
@@ -95,7 +95,7 @@ while running:
     playerpos1 = (playerpos[0] - playerrot.get_rect().width / 2, playerpos[1] - playerrot.get_rect().height / 2)  # 重新计算主角色位置
     screen.blit(playerrot, playerpos1)  # 将旋转后主角色显示在屏幕上
 
-    # 炮弹
+    # 炮弹, update bullet coordinate
     for cannonball in cannonballs:
         index = 0
         # 炮弹移动速度（横轴和纵轴上两个分量）

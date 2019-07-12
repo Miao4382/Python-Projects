@@ -24,8 +24,15 @@ class PlayerPistol:
         self.game_settings = game_settings
 
         # load character image and get its rect
+        # self.image and self.rect are used as reference
         self.image = pygame.image.load('img/player_pistol.jpg')
         self.rect = self.image.get_rect()
+        
+        # rotated character image and rect
+        self.rotated_image = self.image
+        self.updated_rect = self.rect 
+        
+        # screen rect
         self.screen_rect = screen.get_rect()
 
         # set player's starting position (center of the screen)

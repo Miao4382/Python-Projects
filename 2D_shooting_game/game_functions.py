@@ -2,6 +2,7 @@ import sys
 import pygame
 import math  # for rotation angle calculation
 import random
+from pygame.sprite import Group  # for grouping multiple objects based on pygame.sprite
 from bullet_pistol import BulletPistol
 from setting import Settings
 from player import PlayerPistol
@@ -29,17 +30,23 @@ def run_game(screen, game_settings):
     # create objects that will displayed on game main screen
     background = pygame.image.load("img/bg.jpg")
     player = PlayerPistol(screen, game_settings)
-
+    
+    # create Group() object to store bullets that was shot
+    bullets_pistol = Group()
+    
     # start the main loop of the game
     while True:
         # check event
-        check_events(player)
+        check_events(player, bullets_pistol, game_settings, screen)
 
         # update player stats
         player.update()
+        
+        # update bullets 
+        bullets_pistol.update()
 
         # update screen
-        update_screen(background, player, screen)
+        update_screen(background, player, screen, bullets_pistol)
 
 
 def blit_player(player, screen):
@@ -71,15 +78,15 @@ def blit_player(player, screen):
     mouse_position = pygame.mouse.get_pos()
     # calculate angle, 1 rad = 57.29 degrees
     angle = math.atan2(player.rect.centery - mouse_position[1], player.rect.centerx - mouse_position[0]) * 57.29
-    # rotate player's image surface
-    player_rotated_image = pygame.transform.rotate(player.image, 180 - angle)
+    # rotate player's image surface and store rotated image in player's object 
+    player.rotated_image = pygame.transform.rotate(player.image, 180 - angle)
 
-    # find out where to blit the rotated image (coordinate of the upper left corner)
-    player_updated_rect = (player.rect.centerx - player_rotated_image.get_rect().width / 2,
-                           player.rect.centery - player_rotated_image.get_rect().height / 2)
+    # find out where to blit the rotated image (coordinate of the upper left corner), store the updated rect in player's object 
+    player.updated_rect = (player.rect.centerx - player.rotated_image.get_rect().width / 2,
+                           player.rect.centery - player.rotated_image.get_rect().height / 2)
 
     # blit the new position
-    screen.blit(player_rotated_image, player_updated_rect)
+    screen.blit(player.rotated_image, player.updated_rect)
 
 
 def check_keydown_events(event, player):
@@ -114,15 +121,26 @@ def check_keyup_events(event, player):
         player.moving_right = False
 
 
-def check_mousedown(event):
+def check_mousedown(event, player, bullets, game_settings, screen):
+    """
+    Parameter:
+        player: used to calculate the position and angle of the bullet
+        bullets: will add bullet to this group, if left mouse clicked
+    """
+    
     # left click
-    if event.button == 1:
-        s = pygame.mixer.Sound('sfx/weapons/p228.wav')
+    if event.button == 1 and len(bullets.sprites()) < 1:
+        # play the shooting sound at channel 1
+        pistol_sound = pygame.mixer.Sound('sfx/weapons/p228.wav')
         pisto_channel = pygame.mixer.Channel(1)
-        pisto_channel.play(s)
+        pisto_channel.play(pistol_sound)
+        
+        # create a pistol bullet and add to bullets
+        new_bullet = BulletPistol(game_settings, screen, player)
+        bullets.add(new_bullet)
 
 
-def check_events(player):
+def check_events(player, bullets, game_settings, screen):
     """
     Check the broad category and call corresponding methods to do the specific work
     """
@@ -137,20 +155,26 @@ def check_events(player):
             check_keyup_events(event, player)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            check_mousedown(event)
+            check_mousedown(event, player, bullets, game_settings, screen)
 
 
-def update_screen(background, player, screen):
+def update_screen(background, player, screen, bullets):
     """
     Redraw screens (after items on the screen are updated)
     """
-
-    # plot background
+    # draw background
     screen.blit(background, (0, 0))
 
     # update and draw player's character
     blit_player(player, screen)
-
+    
+    # blit each bullet, delete it if out of screen (using a copy)
+    for bullet in bullets.copy().sprites():
+        if bullet.rect.bottom < 0 or bullet.rect.top > screen.get_height() or bullet.rect.left > screen.get_width() or bullet.rect.right < 0:  # out of screen
+            bullets.remove(bullet)        
+        else:
+            bullet.blit_bullet()
+    
     # draw the updated screen
     pygame.display.flip()
 
@@ -164,6 +188,7 @@ def welcome_screen(game_settings, screen):
 
     pygame.mixer.music.load("img/Power Bots Loop.wav")
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.5)
 
     # key click noise:
     # Menu_Navigate_03.wav

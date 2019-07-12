@@ -28,8 +28,8 @@ class Settings:
 
         # screen settings
         self.caption = "shooting game test"
-        self.screen_width = 1050
-        self.screen_height = 690
+        self.screen_width = 1280
+        self.screen_height = 720
 
         # main character settings (carrying pistol)
         self.character_speed = 3
@@ -42,10 +42,7 @@ class Settings:
         self.enemy_timer_1 = 0
 
         # bullet_pistol settings
-        self.bullet_pistol_speed = 60
-        self.bullet_pistol_width = 3
-        self.bullet_pistol_height = 20
-        self.bullet_pistol_color = (255, 223, 0)
+        self.bullet_pistol_speed = 40
 
         # sound channels (playback channels)
         self.foot_step_channel = 0

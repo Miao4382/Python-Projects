@@ -74,14 +74,16 @@ def check_keyup_events(event, player):
 
     if event.key == pygame.K_d:
         player.moving_right = False
-        
+
+
 def check_mousedown(event):
     # left click
     if event.button == 1:
         s = pygame.mixer.Sound('sfx/weapons/p228.wav')
         pisto_channel = pygame.mixer.Channel(1)
         pisto_channel.play(s)
-        
+
+
 def check_events(player):
     """
     Check the broad category and call corresponding methods to do the specific work
@@ -99,7 +101,7 @@ def check_events(player):
         if event.type == pygame.MOUSEBUTTONDOWN:
             check_mousedown(event)
 
-            
+
 def update_screen(background, player, screen):
     """
     Redraw screens (after items on the screen are updated)
@@ -113,4 +115,3 @@ def update_screen(background, player, screen):
     
     # draw the updated screen 
     pygame.display.flip()
-    

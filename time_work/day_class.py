@@ -20,7 +20,7 @@ class Day:
         self.read_time = self.calculate_activity_time("read:")
         self.contemplate_time = self.calculate_activity_time("think:")
         self.ta_time = self.calculate_activity_time("TA_work:")
-        self.tracer = self.calculate_activity_time("leetcode:")
+        self.tracer = self.calculate_activity_time("武汉肺炎：")
 
     def get_month_day(self):
         dash_index = self.text[0].index("-")

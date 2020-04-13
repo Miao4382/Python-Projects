@@ -1,6 +1,15 @@
+"""
+3/04/2020: now use <> to indicate special event in date title.
+"""
 def is_date_title(line):
     if "-" in line and "周" in line:
         if line[line.index("周") - 2].isnumeric() or line.count("-") == 3:
+            # if line[4] == "周":
+            if line.count("-") == 3:
+                # print(line[line.index("周") - 2].isnumeric())
+                # print(line.count("-"))
+                # print(line)
+                print(line)
             return True
 
     return False
@@ -135,4 +144,14 @@ def print_focus_time(days):
     print("\tPlay_day:", play_day)
 
 
-
+# reformat day text: add indentation of day
+def addDayIndentation(outputAddress, inputAddress):
+    fout = open(outputAddress, "w+")
+    fin = open(inputAddress)
+    for line in fin:
+        if is_date_title(line):
+            fout.write(line)
+        else:
+            fout.write("  " + line)
+    fout.close()
+    fin.close()

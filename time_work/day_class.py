@@ -20,7 +20,7 @@ class Day:
         self.read_time = self.calculate_activity_time("read:")
         self.contemplate_time = self.calculate_activity_time("think:")
         self.ta_time = self.calculate_activity_time("TA_work:")
-        self.tracer = self.calculate_activity_time("武汉肺炎：")
+        self.tracer = self.calculate_activity_time("浅水欢愉：")
 
     def get_month_day(self):
         dash_index = self.text[0].index("-")
@@ -33,7 +33,7 @@ class Day:
         hours = 0
         mins = 0
         for line in self.text:
-            if name in line:
+            if name in line and ("~" + name) not in line:
                 if "'" in line:
                     hour_index = line.index("'")
                     first_non_num_index = hour_index - 1
